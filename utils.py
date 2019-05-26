@@ -14,7 +14,7 @@ def breadth_first_search(graph_obj):
         found_new = False
         to_be_visited = [ idx ]
 
-        while True: 
+        while len(to_be_visited) > 0: 
             state = to_be_visited.pop() 
             for neighbour in state:
                 if visited_states[state_to_idx[neighbour]] == 0:
