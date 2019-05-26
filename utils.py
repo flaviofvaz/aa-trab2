@@ -31,6 +31,36 @@ def breadth_first_search(graph_obj, initial_state):
     return num_components
 
 
+def bFS_adapted(graph_obj, initial_state):
+    graph = graph_obj[0]
+    state_to_idx = graph_obj[2]
+
+    visited_states = []
+    for i in range (len(graph)):
+        visited_states.append(0)
+    
+    visited_states[state_to_idx[initial_state]] = 1
+    
+    layers = []
+    layers.append([initial_state])
+    
+    i = 0
+    while True:
+        for state in layers[i]:
+            layer = []
+            for neighbour in state:
+                if visited_states[state_to_idx[neighbour]] == 0:
+                    layer.append(state)
+                    visited_states[state_to_idx[neighbour]] = 1
+            
+            if len(layer) == 0:
+                break
+
+            layers.append(layer)
+            i += 1
+
+    return layers
+
 
 def make_states_graph(initial_state):
     ''' Creates the states graph for the problem based on an initial instance
@@ -143,6 +173,7 @@ def make_states_graph(initial_state):
         graph.append(neighbours)
 
     return graph, state_to_idx, idx_to_state
+
 
 def move_piece(current_state, empty_space, piece_space, side_size):
     empty_1D_pos = empty_space[0] * side_size + empty_space[1]
