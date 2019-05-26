@@ -1,5 +1,7 @@
-def breadth_first_search(graph_obj):
-    components = 0
+import queue
+
+def breadth_first_search(graph_obj, initial_state):
+    num_components = 0
 
     graph = graph_obj[0]
     state_to_idx = graph_obj[2]
@@ -12,20 +14,21 @@ def breadth_first_search(graph_obj):
         visited_states[idx] = 1
         
         found_new = False
-        to_be_visited = [ idx ]
+        to_be_visited = queue.Queue()
+        to_be_visited.put(idx)
 
         while len(to_be_visited) > 0: 
-            state = to_be_visited.pop() 
+            state = to_be_visited.get() 
             for neighbour in state:
                 if visited_states[state_to_idx[neighbour]] == 0:
                     found_new = True
                     visited_states[state_to_idx[neighbour]] = 1
-                    to_be_visited.append(state_to_idx[neighbour])
+                    to_be_visited.put(state_to_idx[neighbour])
         
         if found_new:
-            components += 1
+            num_components += 1
 
-    return components
+    return num_components
 
 
 
