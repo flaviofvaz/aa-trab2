@@ -36,7 +36,6 @@ def breadth_first_search(graph_obj):
 def BFS_adapted(graph_obj, initial_state):
     graph = graph_obj[0]
     state_to_idx = graph_obj[1]
-    #idx_to_state = graph_obj[2]
 
     visited_states = []
     for i in range(len(graph)):
@@ -49,18 +48,18 @@ def BFS_adapted(graph_obj, initial_state):
 
     i = 0
     while True:
+        layer = []        
         for state in layers[i]:
-            layer = []
             for neighbour in graph[state_to_idx[state]]:
                 if visited_states[state_to_idx[neighbour]] == 0:
-                    layer.append(state)
+                    layer.append(neighbour)
                     visited_states[state_to_idx[neighbour]] = 1
 
-            if len(layer) == 0:
-                break
+        if len(layer) == 0:
+            return layers
 
-            layers.append(layer)
-            i += 1
+        layers.append(layer)
+        i += 1
 
     return layers
 
@@ -200,16 +199,36 @@ def move_piece(current_state, empty_space, piece_space, side_size):
 
 graph = make_states_graph(3)
 
+# counting edges
+num_edges = 0
+for edge_list in graph[0]:
+    num_edges += len(edge_list)
+
+# each edge is counted twice
+num_edges = num_edges/2
+
+# size of the list is the number of nodes in the graph
 graph_size = len(graph[0])
 
 print(graph_size)
+print(num_edges)
 
+# getting number of components
 num_components = breadth_first_search(graph)
 
 print(num_components)
 
+# Get layers starting from our desired configuration
 BFS_layers = BFS_adapted(graph, '123456780')
 
+# nodes from the last layer are the more distant from cfg* 
 for e in BFS_layers[-1]:
     print(e)
+
+# checking if the number of nodes found was as expected (9!/2) 
+num_nodes = 0
+for nodes in BFS_layers:
+    num_nodes += len(nodes)
+
+print(num_nodes)
 
